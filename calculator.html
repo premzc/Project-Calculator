@@ -4,11 +4,61 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  
+  <div class="buttons-container">
+    <div class="display display-js">
+    </div>
+    <button class="number">1</button>
+    <button class="number">2</button>
+    <button class="number">3</button>
+    <button class="operator">+</button>
+
+    <button class="number">4</button>
+    <button class="number">5</button>
+    <button class="number">6</button>
+    <button class="operator">-</button>
+
+    <button class="number">7</button>
+    <button class="number">8</button>
+    <button class="number">9</button>
+    <button class="operator">*</button>
+
+    <button class="number">0</button>
+    <button class="number">.</button>
+    <button class="operator">/</button>
+    <button class="calculate">=</button>
+    <button class="clear span-two">clear</button>
+  </div>
 
   <script>
+    let firstNumber = '';
+    let secondNumber = '';
+    let operator = '';
+    let output = document.querySelector('.display-js');
+    let clear = document.querySelector('.clear');
+    let operatorKeys = document.querySelectorAll('.operator');
+    let calculate = document.querySelector('.calculate');
+
+    function operate(firstNumber,secondNumber,operator){
+      firstNumber = parseFloat(firstNumber);
+      secondNumber = parseFloat(secondNumber);
+      switch(operator){
+        case '+' :
+        return  add(firstNumber,secondNumber);
+
+        case '-':
+        return  subtract(firstNumber,secondNumber);
+
+        case '*':
+        return  multiply(firstNumber,secondNumber);
+
+        case '/':
+        return  divide(firstNumber,secondNumber);
+      }
+
+    }
     function add(num1, num2){
       return num1 + num2;
     }
@@ -21,6 +71,48 @@
     function divide(num1, num2){
       return num1 / num2;
     }
+
+    function updateDisplay(){
+      let keys = document.querySelectorAll('.number');
+      keys.forEach(key => {
+        key.addEventListener('click', ()=> {
+          if(operator === ''){
+            firstNumber += key.textContent;
+          }else{
+            secondNumber += key.textContent;
+          }
+          output.textContent += key.textContent;
+        });
+      });
+
+      operatorKeys.forEach(operatorKey => {
+        operatorKey.addEventListener('click', () =>{
+          operator = operatorKey.textContent;
+          output.textContent += operator;
+        });
+      });
+    }
+
+    calculate.addEventListener('click', () => {
+      if(firstNumber !== '' && secondNumber !== '' && operator !==''){
+        console.log(`firstnumber${firstNumber}secondnumber${secondNumber}operator${operator}`);
+        let result = operate(firstNumber,secondNumber,operator);
+        output.textContent = result;
+        console.log(result);
+      }
+    });
+
+    function clearDisplay(){
+      clear.addEventListener('click',() => {
+        output.textContent = '';
+        firstNumber = '';
+        secondNumber = '';
+        operator = '';
+      });
+    }
+
+    updateDisplay();
+    clearDisplay();
   </script>
 </body>
 </html>

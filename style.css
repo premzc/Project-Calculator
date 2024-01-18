@@ -1,0 +1,38 @@
+body{
+  background-color: rgb(29, 29, 29);
+  display:flex;
+  justify-content: center;
+  align-content: center;
+  height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.buttons-container{
+  display: grid;
+  grid-template-columns: repeat(4,100px);
+  gap: 2px;
+}
+
+.buttons-container > button{
+  font-size: 3rem;
+  border: none;
+  background-color: rgba(209, 209, 209, 0.9);
+}
+
+.buttons-container>button:hover{
+  background-color: rgba(209, 209, 209, 0.7);
+  cursor: pointer;
+}
+.display{
+  grid-column: 1 / -1;
+  background-color: white;
+  font-size: 3rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.span-two{
+  grid-column: span 2;
+}
