@@ -8,8 +8,7 @@
 </head>
 <body>
   <div class="buttons-container">
-    <div class="display display-js">
-    </div>
+    <div class="display display-js"></div>
     <button class="number">1</button>
     <button class="number">2</button>
     <button class="number">3</button>
@@ -33,6 +32,11 @@
   </div>
 
   <script>
+    let currentCalculation = {
+      firstNumber : '',
+      secondNumber : '',
+      operator : ''
+    }
     let firstNumber = '';
     let secondNumber = '';
     let operator = '';
@@ -41,73 +45,88 @@
     let operatorKeys = document.querySelectorAll('.operator');
     let calculate = document.querySelector('.calculate');
 
-    function operate(firstNumber,secondNumber,operator){
+    function operate(firstNumber, secondNumber, operator) {
       firstNumber = parseFloat(firstNumber);
       secondNumber = parseFloat(secondNumber);
-      switch(operator){
-        case '+' :
-        return  add(firstNumber,secondNumber);
-
+      switch (operator) {
+        case '+':
+          return add(firstNumber, secondNumber);
         case '-':
-        return  subtract(firstNumber,secondNumber);
-
+          return subtract(firstNumber, secondNumber);
         case '*':
-        return  multiply(firstNumber,secondNumber);
-
+          return multiply(firstNumber, secondNumber);
         case '/':
-        return  divide(firstNumber,secondNumber);
+          return divide(firstNumber, secondNumber);
       }
-
     }
-    function add(num1, num2){
+
+    function add(num1, num2) {
       return num1 + num2;
     }
-    function subtract(num1, num2){
+
+    function subtract(num1, num2) {
       return num1 - num2;
     }
-    function multiply(num1, num2){
+
+    function multiply(num1, num2) {
       return num1 * num2;
     }
-    function divide(num1, num2){
+
+    function divide(num1, num2) {
       return num1 / num2;
     }
 
-    function updateDisplay(){
+    function updateDisplay() {
       let keys = document.querySelectorAll('.number');
       keys.forEach(key => {
-        key.addEventListener('click', ()=> {
-          if(operator === ''){
-            firstNumber += key.textContent;
-          }else{
-            secondNumber += key.textContent;
+        key.addEventListener('click', () => {
+          if (currentCalculation.operator === '') {
+            currentCalculation.firstNumber += key.textContent;
+          } else {
+            currentCalculation.secondNumber += key.textContent;
           }
           output.textContent += key.textContent;
         });
       });
 
       operatorKeys.forEach(operatorKey => {
-        operatorKey.addEventListener('click', () =>{
-          operator = operatorKey.textContent;
-          output.textContent += operator;
+        operatorKey.addEventListener('click', () => {
+          if(currentCalculation.firstNumber !== '' && currentCalculation.secondNumber !== '' && currentCalculation.operator !== '' ){
+            let result = operate(currentCalculation.firstNumber, currentCalculation.secondNumber, currentCalculation.operator);
+
+            output.textContent =result;
+            
+            output.textContent += operatorKey.textContent;
+            
+            currentCalculation.firstNumber = result.toString();
+            currentCalculation.secondNumber = '';
+            currentCalculation.operator = operatorKey.textContent;
+          }else{
+            currentCalculation.operator = operatorKey.textContent;
+            output.textContent += operatorKey.textContent;
+          }
+         // operator = operatorKey.textContent;
+         // output.textContent += operator;
         });
       });
     }
 
     calculate.addEventListener('click', () => {
-      if(firstNumber !== '' && secondNumber !== '' && operator !==''){
-        console.log(`firstnumber${firstNumber}secondnumber${secondNumber}operator${operator}`);
-        let result = operate(firstNumber,secondNumber,operator);
+      if (currentCalculation.firstNumber !== '' && currentCalculation.secondNumber !== '' && currentCalculation.operator !== '') {
+        let result = operate(currentCalculation.firstNumber, currentCalculation.secondNumber, currentCalculation.operator);
         output.textContent = result;
-        console.log(result);
+        currentCalculation.firstNumber = result.toString();
+        currentCalculation.secondNumber = '';
+        currentCalculation.operator = '';
       }
     });
 
-    function clearDisplay(){
-      clear.addEventListener('click',() => {
+    function clearDisplay() {
+      clear.addEventListener('click', () => {
         output.textContent = '';
-        firstNumber = '';
-        secondNumber = '';
-        operator = '';
+        currentCalculation.firstNumber = '';
+        currentCalculation.secondNumber = '';
+        currentCalculation.operator = '';
       });
     }
 
