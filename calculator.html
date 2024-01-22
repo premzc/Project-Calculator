@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <div class="buttons-container">
     <div class="display display-js"></div>
@@ -25,7 +27,7 @@
     <button class="operator">*</button>
 
     <button class="number">0</button>
-    <button class="number">.</button>
+    <button class="dot-js">.</button>
     <button class="operator">/</button>
     <button class="calculate">=</button>
     <button class="clear span-two">clear</button>
@@ -33,9 +35,9 @@
 
   <script>
     let currentCalculation = {
-      firstNumber : '',
-      secondNumber : '',
-      operator : ''
+      firstNumber: '',
+      secondNumber: '',
+      operator: ''
     }
     let firstNumber = '';
     let secondNumber = '';
@@ -44,6 +46,7 @@
     let clear = document.querySelector('.clear');
     let operatorKeys = document.querySelectorAll('.operator');
     let calculate = document.querySelector('.calculate');
+    let dotButton = document.querySelector('.dot-js');
 
     function operate(firstNumber, secondNumber, operator) {
       firstNumber = parseFloat(firstNumber);
@@ -91,22 +94,20 @@
 
       operatorKeys.forEach(operatorKey => {
         operatorKey.addEventListener('click', () => {
-          if(currentCalculation.firstNumber !== '' && currentCalculation.secondNumber !== '' && currentCalculation.operator !== '' ){
+          if (currentCalculation.firstNumber !== '' && currentCalculation.secondNumber !== '' && currentCalculation.operator !== '') {
             let result = operate(currentCalculation.firstNumber, currentCalculation.secondNumber, currentCalculation.operator);
 
-            output.textContent =result;
-            
+            output.textContent = result;
+
             output.textContent += operatorKey.textContent;
-            
+
             currentCalculation.firstNumber = result.toString();
             currentCalculation.secondNumber = '';
             currentCalculation.operator = operatorKey.textContent;
-          }else{
+          } else {
             currentCalculation.operator = operatorKey.textContent;
             output.textContent += operatorKey.textContent;
           }
-         // operator = operatorKey.textContent;
-         // output.textContent += operator;
         });
       });
     }
@@ -118,6 +119,16 @@
         currentCalculation.firstNumber = result.toString();
         currentCalculation.secondNumber = '';
         currentCalculation.operator = '';
+      }
+    });
+
+    dotButton.addEventListener('click', () =>{
+      if(currentCalculation.operator === '' && !currentCalculation.firstNumber.includes('.')){
+        currentCalculation.firstNumber += '.';
+        output.textContent += '.'
+      }else if (currentCalculation.operator !== '' && !currentCalculation.secondNumber.includes('.')) {
+        currentCalculation.secondNumber += '.';
+        output.textContent += '.'
       }
     });
 
@@ -134,4 +145,5 @@
     clearDisplay();
   </script>
 </body>
+
 </html>
