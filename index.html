@@ -38,15 +38,13 @@
       firstNumber: '',
       secondNumber: '',
       operator: ''
-    }
-    let firstNumber = '';
-    let secondNumber = '';
-    let operator = '';
+    };
     let output = document.querySelector('.display-js');
     let clear = document.querySelector('.clear');
-    let operatorKeys = document.querySelectorAll('.operator');
+    let operatorButtons = document.querySelectorAll('.operator');
     let calculate = document.querySelector('.calculate');
     let dotButton = document.querySelector('.dot-js');
+    let operatorClicked = false;
 
     function operate(firstNumber, secondNumber, operator) {
       firstNumber = parseFloat(firstNumber);
@@ -83,6 +81,9 @@
       let keys = document.querySelectorAll('.number');
       keys.forEach(key => {
         key.addEventListener('click', () => {
+          if (operatorClicked) {
+            clearOperatorClicked();
+          }
           if (currentCalculation.operator === '') {
             currentCalculation.firstNumber += key.textContent;
           } else {
@@ -92,21 +93,22 @@
         });
       });
 
-      operatorKeys.forEach(operatorKey => {
-        operatorKey.addEventListener('click', () => {
-          if (currentCalculation.firstNumber !== '' && currentCalculation.secondNumber !== '' && currentCalculation.operator !== '') {
-            let result = operate(currentCalculation.firstNumber, currentCalculation.secondNumber, currentCalculation.operator);
+      operatorButtons.forEach(operatorButton => {
+        operatorButton.addEventListener('click', () => {
+          if (!operatorClicked) {
+            operatorClicked = true;
+            if (currentCalculation.firstNumber !== '' && currentCalculation.secondNumber !== '' && currentCalculation.operator !== '') {
+              let result = operate(currentCalculation.firstNumber, currentCalculation.secondNumber, currentCalculation.operator);
+              output.textContent = result;
+              output.textContent += operatorButton.textContent;
 
-            output.textContent = result;
-
-            output.textContent += operatorKey.textContent;
-
-            currentCalculation.firstNumber = result.toString();
-            currentCalculation.secondNumber = '';
-            currentCalculation.operator = operatorKey.textContent;
-          } else {
-            currentCalculation.operator = operatorKey.textContent;
-            output.textContent += operatorKey.textContent;
+              currentCalculation.firstNumber = result.toString();
+              currentCalculation.secondNumber = '';
+              currentCalculation.operator = operatorButton.textContent;
+            } else {
+              currentCalculation.operator = operatorButton.textContent;
+              output.textContent += operatorButton.textContent;
+            }
           }
         });
       });
@@ -119,30 +121,38 @@
         currentCalculation.firstNumber = result.toString();
         currentCalculation.secondNumber = '';
         currentCalculation.operator = '';
+        operatorClicked = false;
       }
     });
 
-    dotButton.addEventListener('click', () =>{
-      if(currentCalculation.operator === '' && !currentCalculation.firstNumber.includes('.')){
+    dotButton.addEventListener('click', () => {
+      if (operatorClicked) {
+        clearOperatorClicked();
+      }
+      if (currentCalculation.operator === '' && !currentCalculation.firstNumber.includes('.')) {
         currentCalculation.firstNumber += '.';
-        output.textContent += '.'
-      }else if (currentCalculation.operator !== '' && !currentCalculation.secondNumber.includes('.')) {
+        output.textContent += '.';
+      } else if (currentCalculation.operator !== '' && !currentCalculation.secondNumber.includes('.')) {
         currentCalculation.secondNumber += '.';
-        output.textContent += '.'
+        output.textContent += '.';
       }
     });
 
     function clearDisplay() {
-      clear.addEventListener('click', () => {
-        output.textContent = '';
-        currentCalculation.firstNumber = '';
-        currentCalculation.secondNumber = '';
-        currentCalculation.operator = '';
-      });
+      output.textContent = '';
+      currentCalculation.firstNumber = '';
+      currentCalculation.secondNumber = '';
+      currentCalculation.operator = '';
+      operatorClicked = false;
+    }
+
+    function clearOperatorClicked() {
+      operatorClicked = false;
+     // output.textContent = output.textContent.slice(0, -1);
     }
 
     updateDisplay();
-    clearDisplay();
+    clear.addEventListener('click', clearDisplay);
   </script>
 </body>
 
